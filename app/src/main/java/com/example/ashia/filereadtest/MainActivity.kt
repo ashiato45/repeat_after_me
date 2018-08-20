@@ -56,7 +56,7 @@ public class MainActivity : AppCompatActivity() {
                 val intent = Intent(context, ReadTextActivity::class.java);
                 // https://stackoverflow.com/questions/3689581/calling-startactivity-from-outside-of-an-activity/3689900
                 intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("file", data);
+                intent.putExtra("filepath", data.absolutePath);
                 context.startActivity(intent);
 
             }

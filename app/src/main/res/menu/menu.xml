@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/menuListOptionHello"
+        android:title="Hello" />
+    <item
+        android:id="@+id/menuListOptionShowPath"
+        android:title="Show the path" />
+    <item
+        android:id="@+id/menuListOptionMakeFile"
+        android:title="WriteTest" />
+    <item
+        android:id="@+id/menuListOptionUpdate"
+        android:title="Update" />
+</menu>

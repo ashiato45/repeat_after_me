@@ -2,11 +2,15 @@ package com.example.ashia.filereadtest
 
 import android.content.Context
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
+import android.speech.tts.TextToSpeech
+import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.TextView
 import org.w3c.dom.Text
 
@@ -28,14 +32,18 @@ class TextFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var text: String? = null
     private var listener: OnFragmentInteractionListener? = null
+    public lateinit var sp : TextToSpeech ;
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         arguments?.let {
             text = it.getString(ARG_TEXT1)
         }
+
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -43,7 +51,26 @@ class TextFragment : Fragment() {
         val txtMain = view.findViewById<TextView>(R.id.txtMain);
         txtMain.text = text;
 
+        sp = TextToSpeech(context, {
+            view?.findViewById<Button>(R.id.btnPlay)?.isEnabled = true
+        })
+
+        view.findViewById<Button>(R.id.btnPlay).setOnClickListener{
+            sp.speak(text, TextToSpeech.QUEUE_FLUSH, null, "test")
+        }
+
         return view
+    }
+
+
+    override fun onDestroyView() {
+        sp.stop()
+        super.onDestroyView()
+    }
+
+    override fun onDestroy() {
+        sp.stop()
+        super.onDestroy()
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -53,6 +80,7 @@ class TextFragment : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+
 //        if (context is OnFragmentInteractionListener) {
 //            listener = context
 //        } else {
@@ -62,6 +90,7 @@ class TextFragment : Fragment() {
 
     override fun onDetach() {
         super.onDetach()
+        sp.stop()
         listener = null
     }
 

@@ -11,10 +11,13 @@ class ReadTextActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read_text)
 
+
         val filepath = intent.getStringExtra("filepath");
+        val file =  File(filepath);
+        this.title = file.name;
 
         val vp = findViewById<ViewPager>(R.id.vpMain);
-        val efpa = TextFragmentPagerAdapter(supportFragmentManager, File(filepath));
+        val efpa = TextFragmentPagerAdapter(supportFragmentManager, file);
         vp.adapter = efpa;
 
     }

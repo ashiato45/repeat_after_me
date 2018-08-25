@@ -4,13 +4,15 @@
 
     <item
         android:id="@+id/menuListOptionHello"
-        android:title="Hello" />
+        android:title="Hello"
+        android:visible="false" />
     <item
         android:id="@+id/menuListOptionShowPath"
         android:title="Show the path" />
     <item
         android:id="@+id/menuListOptionMakeFile"
-        android:title="WriteTest" />
+        android:title="WriteTest"
+        android:visible="false" />
     <item
         android:id="@+id/menuListOptionUpdate"
         android:title="Update" />

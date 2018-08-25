@@ -1,12 +1,17 @@
 package com.example.ashia.filereadtest
 
+import android.app.Activity
 import android.content.Context
+import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.support.annotation.RequiresApi
 import android.support.v4.app.Fragment
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -30,9 +35,10 @@ private const val ARG_TEXT1 = "TEXT1"
  */
 class TextFragment : Fragment() {
     // TODO: Rename and change types of parameters
-    private var text: String? = null
+    private var text: String = "This is a sample sentence."
     private var listener: OnFragmentInteractionListener? = null
     public lateinit var sp : TextToSpeech ;
+    private val SPEECH_REQUEST_CODE = 0
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -49,7 +55,8 @@ class TextFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_text, container, false)
         val txtMain = view.findViewById<TextView>(R.id.txtMain);
-        txtMain.text = text;
+
+
 
         sp = TextToSpeech(context, {
             view?.findViewById<Button>(R.id.btnPlay)?.isEnabled = true
@@ -59,7 +66,46 @@ class TextFragment : Fragment() {
             sp.speak(text, TextToSpeech.QUEUE_FLUSH, null, "test")
         }
 
+        view.findViewById<Button>(R.id.btnRecord).setOnClickListener{
+            txtMain.setTextColor(Color.BLACK);
+            val intent = Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE_MODEL,
+                    RecognizerIntent.LANGUAGE_MODEL_FREE_FORM)
+            intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "en-US")
+            intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP)
+            // Start the activity, the intent will be populated with the speech text
+            startActivityForResult(intent, SPEECH_REQUEST_CODE)
+        }
+
+        view.findViewById<Button>(R.id.btnAnswer).setOnClickListener{
+            txtMain.setTextColor(Color.RED);
+            txtMain.text = text;
+        }
+
         return view
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        if(data != null) {
+            if (requestCode == SPEECH_REQUEST_CODE && resultCode ==  Activity.RESULT_OK) {
+                val results = data.getStringArrayListExtra(
+                        RecognizerIntent.EXTRA_RESULTS)
+                val spokenText = results[0]
+
+                val diff = 1 - (calcNormalizedLevenshteinDistance(spokenText, text).toFloat())/text.length;
+                val isok = if(diff < 0.1) "[OK]" else "[Retry!(%d%%)]".format((diff*100).toInt())
+
+                // Do something with spokenText
+                this.view?.findViewById<TextView>(R.id.txtMain)?.setText(spokenText + isok )
+            }
+            if (resultCode == Activity.RESULT_CANCELED) {
+                Log.e("mine", "cancelled!")
+            }
+
+
+            super.onActivityResult(requestCode, resultCode, data)
+        }
+        super.onActivityResult(requestCode, resultCode, data)
     }
 
 

@@ -7,6 +7,7 @@
     tools:context=".TextFragment">
 
     <!-- TODO: Update blank fragment layout -->
+
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -14,8 +15,12 @@
         <TextView
             android:id="@+id/txtMain"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
             android:text="@string/hello_blank_fragment"
+            app:layout_constraintBottom_toTopOf="@+id/btnRecord"
+            app:layout_constraintTop_toTopOf="parent"
             tools:layout_editor_absoluteX="0dp" />
 
         <Button
@@ -33,34 +38,29 @@
             android:id="@+id/btnRecord"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginStart="8dp"
             android:text="Record"
-            app:layout_constraintEnd_toStartOf="@+id/btnAnswer"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toStartOf="@+id/txtMain"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnPlay"
-            tools:layout_editor_absoluteY="455dp" />
+            app:layout_constraintStart_toEndOf="@+id/txtMain" />
 
         <Button
             android:id="@+id/btnAnswer"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginLeft="8dp"
             android:layout_marginRight="8dp"
             android:layout_marginStart="8dp"
             android:text="Answer"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toEndOf="@+id/btnRecord"
-            tools:layout_editor_absoluteY="455dp" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            app:layout_constraintGuide_begin="20dp" />
+            app:layout_constraintStart_toEndOf="@+id/btnRecord" />
 
     </android.support.constraint.ConstraintLayout>
 

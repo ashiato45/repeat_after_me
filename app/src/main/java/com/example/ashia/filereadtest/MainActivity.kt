@@ -20,7 +20,9 @@ import android.widget.SimpleAdapter
 import android.widget.Toast
 import java.io.*
 import java.util.*
-
+import android.content.DialogInterface
+import android.net.Uri
+import android.support.v7.app.AlertDialog
 
 
 data class TestData(val name: String, val price: Int, val desc: String){
@@ -50,7 +52,7 @@ public class MainActivity : AppCompatActivity() {
             }else {
                 val item = parent.getItemAtPosition(position) as Map<String, Any>;
                 val data = item["data"] as File;
-                Toast.makeText(context, data.name, Toast.LENGTH_LONG).show();
+                //Toast.makeText(context, data.name, Toast.LENGTH_LONG).show();
 
 
                 val intent = Intent(context, ReadTextActivity::class.java);
@@ -69,18 +71,10 @@ public class MainActivity : AppCompatActivity() {
 
 
         val lvMenu = findViewById<ListView>(R.id.lvMenu);
-//        val menuList = mutableListOf<Map<String, Any>>();
-//
-//        menuList.add(makeData("Agedofu", 100, "Fried tofu"));
-//        menuList.add(makeData("Inari", 200, "Sushi of fried tofu"));
-//        menuList.add(makeData("Kinudofu",  150, "Smooth tofu"));
-//
-//        val from = arrayOf("name", "price");
-//        val to = intArrayOf(android.R.id.text1, android.R.id.text2);
-//
-//        val adapter = SimpleAdapter(this, menuList, android.R.layout.simple_list_item_2, from, to);
-//        lvMenu.adapter = adapter;
-        updateFileList();
+
+
+
+        initAndupdateFileList()
         lvMenu.setOnItemClickListener(ListItemClickListener(this.applicationContext));
 
 
@@ -92,10 +86,42 @@ public class MainActivity : AppCompatActivity() {
         return super.onCreateOptionsMenu(menu)
     }
 
-    private fun updateFileList(){
+    private fun initAndupdateFileList(){
         val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
-        val path = dir.resolve("repeat_after_me");
-        Toast.makeText(this, path.toString() , Toast.LENGTH_LONG).show();
+        val path = dir.resolve(resources.getString(R.string.dirname));
+
+        if(!path.exists()){
+            AlertDialog.Builder(this)
+                    .setTitle(resources.getString(R.string.app_name))
+                    .setMessage(resources.getString(R.string.dialog_init))
+                    .setPositiveButton(resources.getString(R.string.dialog_init_yes), DialogInterface.OnClickListener { dialog, which ->
+                        // OK button pressed
+                        path.mkdirs()
+                        val sample = File(path, resources.getString(R.string.samplefile_filename));
+                        val fos = FileOutputStream(sample);
+                        fos.write(resources.getString(R.string.samplefile_content).toByteArray());
+                        fos.flush();
+                        fos.close();
+                        MediaScannerConnection.scanFile(this, arrayOf(sample.absolutePath), null, null);
+                        updateFileList(path);
+
+                                        AlertDialog.Builder(this)
+                                        .setTitle(resources.getString(R.string.app_name))
+                                        .setMessage(R.string.dialog_init_made)
+                                .setPositiveButton(R.string.dialog_init_made_ok, null)
+                                .show()
+                    })
+                    .setNegativeButton(resources.getString(R.string.dialog_init_no), { dialog, which ->
+                        this.finish()
+
+                    })
+                    .show()
+        }else {
+           updateFileList(path);
+        }
+    }
+
+    private fun updateFileList(path: File){
         val menuList = mutableListOf<Map<String, Any>>();
 
         for (f in path.listFiles()) {
@@ -119,8 +145,9 @@ public class MainActivity : AppCompatActivity() {
             }
             R.id.menuListOptionShowPath ->{
                 // need to give a permission in AndroidManifest.xml, and in the setting menu of the phone.
-                val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
-                Toast.makeText(this, dir.toString() + "/" + dir.listFiles()[0].name.toString() , Toast.LENGTH_LONG).show();
+                val dir = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOCUMENTS);
+                val path = dir.resolve(resources.getString(R.string.dirname));
+                Toast.makeText(this, path.absolutePath.toString() , Toast.LENGTH_LONG).show();
 
             }
             R.id.menuListOptionMakeFile -> {
@@ -134,7 +161,7 @@ public class MainActivity : AppCompatActivity() {
                 Toast.makeText(this, "Made a file." , Toast.LENGTH_LONG).show();
             }
             R.id.menuListOptionUpdate -> {
-                updateFileList();
+                initAndupdateFileList()
 
             }
 

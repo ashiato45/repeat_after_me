@@ -3,4 +3,13 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="instruction">Touch PLAY to listen to the sentence.  If you understand it, touch RECORD and speak.  If you give up, touch ANSWER and check the answer.</string>
+    <string name="samplefile_content">Please swipe left.\nThis is a sample file.</string>
+    <string name="samplefile_filename">sample.txt</string>
+    <string name="dirname">repeat_after_me</string>
+    <string name="dialog_init">A folder \"repeat_after_me\" was not found in the Document folder.  Are you sure you want to make the folder?</string>
+    <string name="dialog_init_yes">Yes, make it</string>
+    <string name="dialog_init_no">No</string>
+    <string name="dialog_init_made">The folder \"repeat_after_me\" is created in the Document folder with \"sample.txt.\"  This might be invisible from your PC until your phone is rebooted.</string>
+    <string name="dialog_init_made_ok">OK, I will reboot my phone later.</string>
 </resources>

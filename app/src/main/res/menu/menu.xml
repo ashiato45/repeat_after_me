@@ -16,4 +16,10 @@
     <item
         android:id="@+id/menuListOptionUpdate"
         android:title="Update" />
+    <item
+        android:id="@+id/menuListOptionSetting"
+        android:title="Setting" />
+    <item
+        android:id="@+id/menuListOptionEraseSetting"
+        android:title="Erase Setting" />
 </menu>

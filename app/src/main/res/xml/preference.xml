@@ -1,0 +1,10 @@
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <ListPreference
+        android:defaultValue="90"
+        android:entries="@array/entries_list_acceptance_criterion"
+        android:entryValues="@array/entries_list_acceptance_criterion"
+        android:key="list_preference_acceptance"
+        android:summary="@string/setting_desc_acecptance_criterion"
+        android:title="Acceptance Criterion" />
+</PreferenceScreen>

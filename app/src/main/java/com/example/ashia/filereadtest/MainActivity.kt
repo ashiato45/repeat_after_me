@@ -1,8 +1,6 @@
 package com.example.ashia.filereadtest
 
-import android.content.Context
-import android.content.ContextWrapper
-import android.content.Intent
+import android.content.*
 import android.media.MediaScannerConnection
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -20,8 +18,9 @@ import android.widget.SimpleAdapter
 import android.widget.Toast
 import java.io.*
 import java.util.*
-import android.content.DialogInterface
 import android.net.Uri
+import android.preference.PreferenceManager
+import android.provider.Settings
 import android.support.v7.app.AlertDialog
 
 
@@ -163,6 +162,16 @@ public class MainActivity : AppCompatActivity() {
             R.id.menuListOptionUpdate -> {
                 initAndupdateFileList()
 
+            }
+            R.id.menuListOptionSetting -> {
+                val intent = Intent(this, SettingsActivity::class.java);
+
+                this.startActivity(intent);
+            }
+
+            R.id.menuListOptionEraseSetting ->{
+                val sp = PreferenceManager.getDefaultSharedPreferences(this);
+                sp.edit().clear().commit();
             }
 
         }

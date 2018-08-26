@@ -35,7 +35,7 @@ public class MainActivity : AppCompatActivity() {
     private fun makeFileData(f: File): Map<String, Any>{
         var res = HashMap<String, Any>();
         res.put("name", f.name);
-        res.put("length", f.length().toString());
+        res.put("length", f.length().toString() + " bytes");
         res.put("data", f);
         return res;
 

@@ -3,10 +3,12 @@ package com.example.ashia.filereadtest
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.speech.RecognizerIntent
 import android.speech.tts.TextToSpeech
 import android.support.annotation.RequiresApi
@@ -39,6 +41,7 @@ class TextFragment : Fragment() {
     private var listener: OnFragmentInteractionListener? = null
     public lateinit var sp : TextToSpeech ;
     private val SPEECH_REQUEST_CODE = 0
+    lateinit var sharedPref : SharedPreferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -55,7 +58,7 @@ class TextFragment : Fragment() {
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_text, container, false)
         val txtMain = view.findViewById<TextView>(R.id.txtMain);
-
+        sharedPref = PreferenceManager.getDefaultSharedPreferences(context);
 
 
         sp = TextToSpeech(context, {
@@ -92,11 +95,13 @@ class TextFragment : Fragment() {
                         RecognizerIntent.EXTRA_RESULTS)
                 val spokenText = results[0]
 
-                val diff = 1 - (calcNormalizedLevenshteinDistance(spokenText, text).toFloat())/text.length;
-                val isok = if(diff < 0.1) "[OK]" else "[Retry!(%d%%)]".format((diff*100).toInt())
+
+                val acceptance = sharedPref.getString("list_preference_acceptance", "90").toFloat()/100;
+                val diff = (calcNormalizedLevenshteinDistance(spokenText, text).toFloat())/text.length;
+                val isok = if(diff <= 1 - acceptance) "[OK]" else "[Retry!(%d%%)]".format(((1 - diff)*100).toInt())
 
                 // Do something with spokenText
-                this.view?.findViewById<TextView>(R.id.txtMain)?.setText(spokenText + isok )
+                this.view?.findViewById<TextView>(R.id.txtMain)?.setText(spokenText + isok)
             }
             if (resultCode == Activity.RESULT_CANCELED) {
                 Log.e("mine", "cancelled!")

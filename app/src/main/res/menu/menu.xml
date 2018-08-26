@@ -21,5 +21,6 @@
         android:title="Setting" />
     <item
         android:id="@+id/menuListOptionEraseSetting"
-        android:title="Erase Setting" />
+        android:title="Erase Setting"
+        android:visible="false" />
 </menu>

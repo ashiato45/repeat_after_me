@@ -23,4 +23,7 @@
         android:id="@+id/menuListOptionEraseSetting"
         android:title="Erase Setting"
         android:visible="false" />
+    <item
+        android:id="@+id/menuListOptionAllInOne"
+        android:title="Convert data_allinone" />
 </menu>
